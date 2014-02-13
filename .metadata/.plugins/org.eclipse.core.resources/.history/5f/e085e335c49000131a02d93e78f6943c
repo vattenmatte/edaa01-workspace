@@ -1,0 +1,39 @@
+package mountain;
+
+import mountain.Point;
+
+public class Side {
+	public Point x;
+	public Point y;
+	public Point midPoint;
+
+	public Side(Point x, Point y, Point midPoint) {
+		this.x = x;
+		this.y = y;
+		this.midPoint = midPoint;
+	}
+
+	public Point getMid() {
+		return midPoint;
+	}
+
+	public Point getX() {
+		return x;
+	}
+
+	public Point getY() {
+		return y;
+	}
+
+	public boolean hasSameMid(Side s) {
+		if ((s.getMid().getX() <= (midPoint.getX() + 0.0001))
+				&& (s.getMid().getX() >= (midPoint.getX() - 0.0001))
+				&& (s.getMid().getY() <= (midPoint.getY() + 0.0001))
+				&& (s.getMid().getY() >= (midPoint.getY() - 0.0001))) {
+			return true;
+
+		} else {
+			return false;
+		}
+	}
+}

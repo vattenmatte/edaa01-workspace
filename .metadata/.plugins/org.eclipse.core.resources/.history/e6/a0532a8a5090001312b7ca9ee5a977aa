@@ -1,0 +1,105 @@
+package mountain;
+
+import fractal.*;
+import mountain.Side;
+import java.util.LinkedList;
+import java.util.Iterator;
+
+public class RandomMountainMidP extends Fractal {
+	private Point x;
+	private Point y;
+	private Point z;
+	private double devi;
+	private LinkedList<Side> midList;
+	private Iterator<Side> itr;
+
+	public RandomMountainMidP(Point x, Point y, Point z, double dev) {
+		super();
+		this.x = x;
+		this.y = y;
+		this.z = z;
+		this.devi = dev;
+		midList = new LinkedList<Side>();
+		itr = midList.iterator();
+	}
+
+	public String getTitle() {
+		return "Mountains D6";
+	}
+
+	public void draw(TurtleGraphics turtle) {
+		drawTriangle(turtle, x, y, z, order, devi);
+	}
+
+	public void drawTriangle(TurtleGraphics turtle, Point x, Point y, Point z,
+			int orderc, double deviation) {
+		if (orderc == 0) {
+			drawOut(turtle, x, y, z);
+		} else {
+			double randomOne = RandomUtilities.randFuncO(deviation);
+			double randomTwo = RandomUtilities.randFuncO(deviation);
+			double randomThree = RandomUtilities.randFuncO(deviation);
+			Point a = midFromListOrNot(x, y, randomOne);
+			Point b = midFromListOrNot(y, z, randomTwo);
+			Point c = midFromListOrNot(x, z, randomThree);
+			Side sideA = new Side(x, y, a);
+			Side sideB = new Side(y, z, b);
+			Side sideC = new Side(x, z, c);
+			midList.add(sideA);
+			midList.add(sideB);
+			midList.add(sideC);
+			if ((orderc--) > 0) {
+				combinatorialDrawOut(turtle, a, b, c, x, y, z);
+				deviation = deviation / 2;
+				combinatorialDrawTriangle(turtle, a, b, c, x, y, z, orderc,
+						deviation);
+			}
+		}
+	}
+
+	public void drawOut(TurtleGraphics turtle, Point a, Point b, Point c) {
+		turtle.moveTo(a.getX(), a.getY());
+		turtle.penDown();
+		turtle.forwardTo(b.getX(), b.getY());
+		turtle.forwardTo(c.getX(), c.getY());
+		turtle.forwardTo(a.getX(), a.getY());
+	}
+
+	private Point getNewMidPoint(Point x, Point y, double randomNumber) {
+		Point midPoint = new Point((x.getX() + y.getX()) / 2, randomNumber
+				* (x.getY() + y.getY()) / 2 + (x.getY() + y.getY()) / 2);
+		return midPoint;
+	}
+
+	private void combinatorialDrawTriangle(TurtleGraphics turtle, Point a,
+			Point b, Point c, Point x, Point y, Point z, int order,
+			double deviation) {
+		drawTriangle(turtle, a, b, c, order, deviation);
+		drawTriangle(turtle, x, a, c, order, deviation);
+		drawTriangle(turtle, y, b, a, order, deviation);
+		drawTriangle(turtle, z, c, b, order, deviation);
+	}
+
+	private void combinatorialDrawOut(TurtleGraphics turtle, Point a, Point b,
+			Point c, Point x, Point y, Point z) {
+		drawOut(turtle, a, b, c);
+		drawOut(turtle, x, a, c);
+		drawOut(turtle, y, b, a);
+		drawOut(turtle, z, c, b);
+	}
+
+	public Point midFromListOrNot(Point x, Point y, double random) {
+		Point a = null;
+		while (itr.hasNext()) {
+			a = getNewMidPoint(x, y, 0);
+			Side side = itr.next();
+			if (side.getMid().equals(a)) {
+				a = side.getMid();
+				midList.remove(side);
+				return a;
+			}
+		}
+		a = getNewMidPoint(x, y, random);
+		return a;
+	}
+}

@@ -1,0 +1,57 @@
+package mountain;
+
+import fractal.*;
+
+public class RandomMountain extends Fractal {
+	private Point x;
+	private Point y;
+	private Point z;
+	private Double dev;
+	private static int k=0;
+
+	public RandomMountain(Point x, Point y, Point z, double dev) {
+		super();
+		this.x = x; // startpunkt som skickas in i move.
+		this.y = y;
+		this.z = z;
+		this.dev = dev;
+	}
+
+	public String getTitle() {
+		return "Random Mountains";
+	}
+
+	public void draw(TurtleGraphics turtle) {		
+		drawTriangle(turtle, x, y, z, order);
+	}
+
+	// startar i x slutar i x då order är noll.
+	public void drawTriangle(TurtleGraphics turtle, Point x, Point y, Point z, int orderc) {
+		Point a = new Point((x.getX() + y.getX()) / 2,RandomUtilities.randFunc(dev)*(x.getY() + y.getY()) / 2);
+		Point b = new Point((y.getX() + z.getX()) / 2,RandomUtilities.randFunc(dev)*(y.getY() + z.getY()) / 2);
+		Point c = new Point((x.getX() + z.getX()) / 2,RandomUtilities.randFunc(dev)*(x.getY() + z.getY()) / 2);	
+		if (k==0) {
+		drawOut(turtle,x,a,c);
+		drawOut(turtle,y,b,a);
+		drawOut(turtle,z,c,b);
+		k=1;
+		}	
+		if (orderc>0) {
+			dev=dev/2;
+			orderc--;
+			drawTriangle(turtle, a, b, c, orderc);
+			drawTriangle(turtle, x, a, c, orderc);
+			drawTriangle(turtle, y, b, a, orderc);
+			drawTriangle(turtle, z, c, b, orderc);
+		
+		}
+	}
+	
+	public void drawOut(TurtleGraphics turtle, Point a, Point b, Point c) {
+		turtle.moveTo(a.getX(), a.getY());
+		turtle.penDown();
+		turtle.forwardTo(b.getX(), b.getY());
+		turtle.forwardTo(c.getX(), c.getY());
+		turtle.forwardTo(a.getX(), a.getY());
+	}
+}

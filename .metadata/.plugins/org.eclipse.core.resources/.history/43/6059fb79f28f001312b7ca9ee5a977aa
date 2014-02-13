@@ -1,0 +1,39 @@
+package mountain;
+
+import fractal.*;
+
+public class Mountain extends Fractal {
+	private Point x;
+	private Point y;
+	private Point z;
+
+	public Mountain(Point x, Point y, Point z) {
+		super();
+		this.x = x; // startpunkt som skickas in i move.
+		this.y = y;
+		this.z = z;
+
+	}
+
+	public String getTitle() {
+		return "Non-random Mountains";
+	}
+
+	public void draw(TurtleGraphics turtle) {
+		turtle.moveTo(x.getX(), x.getY());	
+		drawTriangle(turtle, x, y, z);
+		Point a = new Point((x.getX()+y.getX())/2,(x.getY()+y.getY())/2);
+		Point b = new Point((y.getX()+z.getX())/2,(y.getY()+z.getY())/2);
+		Point c = new Point((x.getX()+z.getX())/2,(x.getY()+z.getY())/2);
+		drawTriangle(turtle, a, b, c);
+	}
+
+	// startar i x slutar i x då order är noll.
+	public void drawTriangle(TurtleGraphics turtle, Point x, Point y, Point z) {
+		turtle.moveTo(x.getX(),x.getY());
+		turtle.penDown();
+		turtle.forwardTo(y.getX(), y.getY());
+		turtle.forwardTo(z.getX(), z.getY());
+		turtle.forwardTo(x.getX(), x.getY());
+	}
+}

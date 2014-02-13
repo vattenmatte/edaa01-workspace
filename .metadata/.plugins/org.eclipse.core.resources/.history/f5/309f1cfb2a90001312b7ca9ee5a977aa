@@ -1,0 +1,21 @@
+package fractal;
+
+import koch.Koch;
+import mountain.Point;
+import mountain.Mountain;
+import mountain.RandomMountain;
+
+public class FractalApplication {
+	public static void main(String[] args) {
+		Fractal[] fractals = new Fractal[3];//byt till 2
+		fractals[0] = new Koch(300);
+		Point x = new Point(100,400);
+		Point y = new Point(400,375);
+		Point z = new Point(275,200);
+		fractals[1] = new Mountain(x,y,z);
+		double dev=1;
+		fractals[2] = new RandomMountain(x,y,z,dev);
+	    new FractalView(fractals, "Mattias samlade fraktaler");
+	}
+
+}
